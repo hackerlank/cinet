@@ -1,0 +1,6 @@
+[submodule "base"]
+	path = base
+	url = http://github.com/izerocrazy/c_base.git
+[submodule "thread"]
+	path = thread
+	url = http://github.com/izerocrazy/thread.git
