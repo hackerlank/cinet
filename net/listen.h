@@ -1,7 +1,7 @@
 #ifndef __LISTEN_H__
 #define __LISTEN_H__
 
-#include "../../thread/kthread.h"
+#include "../thread/kthread.h"
 
 class KListen
 {

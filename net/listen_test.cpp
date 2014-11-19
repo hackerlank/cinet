@@ -1,5 +1,5 @@
 #include "listen.h"
-#include "../../thread/base/error.h"
+#include "../thread/base/error.h"
 
 void TestListen();
 void TestStopListen();
