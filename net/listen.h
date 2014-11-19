@@ -11,7 +11,10 @@ class KListen
 			KE_LISTEN_STOP = 0,
 			KE_LISTEN_LIVE = 1,
 		};
-		enum MAX_PEND_NUMBER = 128;
+		enum KE_NUMBER
+		{
+			MAX_PEND_NUMBER = 128,
+		};
 
 		KListen();
 		~KListen();
@@ -40,6 +43,6 @@ class KListen
 		// Socket List
 		unsigned int m_hAcceptSocket[1000];
 		unsigned int m_nLastOne;
-}
+};
 
 #endif

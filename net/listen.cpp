@@ -1,7 +1,16 @@
 #include "listen.h"
-#include "../base/error.h"
+#include "../base/include/error.h"
+#include "../base/include/function.h"
 
-KListen:KListen()
+#ifdef WIN32
+#else
+#include <netinet/in.h> // base struct
+#include <sys/socket.h> // base function
+#include <string.h>
+#include <netdb.h>
+#endif
+
+KListen::KListen()
 {
 	m_uStop = KE_LISTEN_STOP;
 	m_hThread = NULL;
@@ -9,7 +18,7 @@ KListen:KListen()
 	m_nLastOne = 0;
 }
 
-KListen:~KListen()
+KListen::~KListen()
 {
 	if (m_uStop == KE_LISTEN_LIVE)
 	{
@@ -32,7 +41,7 @@ KListen:~KListen()
 // 参数
 // szIP 传入的 IP 地址，不允许为空，支持添"0.0.0.0"时，自动分配
 // nPort 传入参数
-int KListen:Listen(const char* szIP, int nPort)
+int KListen::Listen(const char* szIP, int nPort)
 {
 	int nRet = 1;
 	int errcode = 0;
@@ -104,7 +113,7 @@ ExitFailed:
 // set handle nonblock fail 2
 // set handle reuse state fail 3
 // set tcp nodelay fail 4
-int KListen:_SetSocketOpt() {
+int KListen::_SetSocketOpt() {
 	int nRet = 1;
 	unsigned int uParam = 1;
 	int nBlockFlag = 0;
@@ -118,9 +127,7 @@ int KListen:_SetSocketOpt() {
 	nRet = 2;
 #ifdef WIN32
 	KF_PROCESS_ERROR(ioctlsocket(m_hSocket, FIONBIO, (u_long *)&uParam) != SOCKET_ERROR);
-#endif
-
-#ifdef LINUX
+#else
 	nBlockFlag = fcntl(m_hSocket, F_GETFL, 0);
 	KF_PROCESS_ERROR(nFlag != -1);
 	nBlockFlag |= O_NONBLOCK;
@@ -142,7 +149,7 @@ ExitFailed:
 
 // success 0
 // alreadystop 1
-int KListen:StopListen()
+int KListen::StopListen()
 {
 	int nRet = 1;
 	// check stop state
@@ -178,7 +185,7 @@ ExitFailed:
 	return nRet;
 }
 
-void KListen:WorkThread(void *pThis)
+void KListen::WorkThread(void *pThis)
 {
 	fd_set sProcessSet, sFailSet;
 	timeval sTimeVal = {0};
@@ -222,7 +229,7 @@ ExitFailed:
 // success 0
 // socket handle error 1
 // max accept socket 2
-int KListen:ListenSuccess()
+int KListen::ListenSuccess()
 {
 	unsigned int hAcceptSocket;
 	sockaddr_in sAddr;
@@ -232,9 +239,7 @@ int KListen:ListenSuccess()
 	int nErrorCode;
 	int nAddrLen;
 	nAddrLen = sizeof(sAddr);
-#endif
-
-#ifdef LINUX
+#else
 	socklen_t nAddrLen;
 	nAddrLen = (socklen_t)sizeof(sAddr);
 #endif
@@ -253,8 +258,7 @@ int KListen:ListenSuccess()
 		{
 			ListenFail();
 		}
-#endif
-#ifdef LINUX
+#else
 		if (errno != EINPROGRESS && errno != EAGAIN)
 		{
 			ListenFail();
