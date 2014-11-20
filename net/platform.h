@@ -3,12 +3,12 @@
 
 #ifdef WIN32
 #else
-#include <sys/tpyes.h>
+#include <sys/types.h>
 #include <netinet/in.h> // base struct
 #include <netinet/tcp.h> // tcp
 #include <sys/socket.h> // base function
 #include <arpa/inet.h>
-
+#include <fcntl.h>
 #include <sys/stat.h> // file handle
 #endif
 

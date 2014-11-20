@@ -1,4 +1,4 @@
-cc = g++
+cc = clang
 
 #code dir
 NET_DIR = ../net
@@ -13,21 +13,23 @@ OBJ_DIR = ./obj
 #app dir
 APP_DIR = ./app
 
-CFLAGS = -g
+# CFLAGS = -g -v -lstdc++
+CFLAGS = -g -lstdc++
 
 .PHONY:all
 all: cinet
+test: cinet_test
 
 # net
 cinet: base thread $(NET_DIR)/listen.cpp
-	cc $(CFLAGS) -o $(OBJ_DIR)/cinet.o -c $(NET_DIR)/listen.cpp $(OBJ_DIR)/error.o $(OBJ_DIR)/thread.o
+	cc $(CFLAGS) -o $(OBJ_DIR)/cinet.o -c $(NET_DIR)/listen.cpp
 
 cinet_test: base thread cinet $(NET_DIR)/listen_test.cpp
 	cc $(CFLAGS) -o $(APP_DIR)/cinet_test.app $(NET_DIR)/listen_test.cpp $(OBJ_DIR)/cinet.o $(OBJ_DIR)/error.o $(OBJ_DIR)/thread.o
 
 # thread
 thread: base $(THREAD_DIR)/kthread.cpp
-	cc $(CFLAGS) -o $(OBJ_DIR)/thread.o -c $(THREAD_DIR)/kthread.cpp $(OBJ_DIR)/error.o
+	cc $(CFLAGS) -o $(OBJ_DIR)/thread.o -c $(THREAD_DIR)/kthread.cpp
 
 tbread_test: base $(THREAD_DIR)/kthread.cpp $(THREAD_DIR)/test.cpp
 	cc $(CFLAGS) -o $(APP_DIR)/thread_test.app $(THREAD_DIR)/kthread.cpp $(THREAD_DIR)/test.cpp $(OBJ_DIR)/error.o

@@ -22,7 +22,7 @@ class KListen
 		int Listen(const char* szIP, int nPort);
 		int StopListen();
 
-		void WorkThread(void* pThis);
+		static void WorkThread(void* pThis);
 
 	private:
 		int _SetSocketOpt();
@@ -42,7 +42,7 @@ class KListen
 
 		// Socket List
 		unsigned int m_hAcceptSocket[1000];
-		unsigned int m_nLastOne;
+		int m_nLastOne;
 };
 
 #endif

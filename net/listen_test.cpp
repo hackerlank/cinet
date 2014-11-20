@@ -1,5 +1,5 @@
 #include "listen.h"
-#include "../thread/base/error.h"
+#include "../base/include/error.h"
 
 void TestListen();
 void TestStopListen();
@@ -35,10 +35,13 @@ void TestListen()
 	errorcode = pl->Listen("127.0.0.1", 8080);	// Part already use
 
 	delete pl;
+	pl = NULL;
 	delete pl2;
+	pl2 = NULL;
 
 	pl = new KListen();
 	errorcode = pl->Listen("127.0.0.1", 8080);	// 应该也是 success，但注意这里面有可能会遇上 WAIT 这个状态
+	pl = NULL;
 }
 
 void TestStopListen()

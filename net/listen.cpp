@@ -83,7 +83,7 @@ int KListen::Listen(const char* szIP, int nPort)
 
 	// set bind
 	nRet = 8;
-	KF_PROCESS_ERROR(bind(m_hSocket, (sockaddr*)sAddr, sizeof(sAddr)) != SOCKET_ERROR);
+	KF_PROCESS_ERROR(bind(m_hSocket, (sockaddr*)&sAddr, sizeof(sAddr)) != SOCKET_ERROR);
 
 	// set listen
 	nRet = 9;
@@ -122,7 +122,7 @@ int KListen::_SetSocketOpt() {
 	KF_PROCESS_ERROR(ioctlsocket(m_hSocket, FIONBIO, (u_long *)&uParam) != SOCKET_ERROR);
 #else
 	nBlockFlag = fcntl(m_hSocket, F_GETFL, 0);
-	KF_PROCESS_ERROR(nFlag != -1);
+	KF_PROCESS_ERROR(nBlockFlag != -1);
 	nBlockFlag |= O_NONBLOCK;
 	fcntl(m_hSocket, F_SETFL, nBlockFlag);
 #endif
