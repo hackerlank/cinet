@@ -3,9 +3,13 @@
 
 #ifdef WIN32
 #else
+#include <sys/tpyes.h>
 #include <netinet/in.h> // base struct
+#include <netinet/tcp.h> // tcp
 #include <sys/socket.h> // base function
 #include <arpa/inet.h>
+
+#include <sys/stat.h> // file handle
 #endif
 
 // windows has,linux no
