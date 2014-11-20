@@ -1,14 +1,7 @@
 #include "listen.h"
 #include "../base/include/error.h"
 #include "../base/include/function.h"
-
-#ifdef WIN32
-#else
-#include <netinet/in.h> // base struct
-#include <sys/socket.h> // base function
-#include <string.h>
-#include <netdb.h>
-#endif
+#include "platform.h"
 
 KListen::KListen()
 {
@@ -190,10 +183,10 @@ void KListen::WorkThread(void *pThis)
 	fd_set sProcessSet, sFailSet;
 	timeval sTimeVal = {0};
 	int nSelectRet;
+	KListen* pWork = (KListen*)pThis;
 
 	// check for this point
 	KF_PROCESS_ERROR(pThis != NULL);
-	KListen* pWork = (KListen*)pThis;
 
 	// check for state
 	KF_PROCESS_ERROR(pWork->m_uStop != KE_LISTEN_STOP);
