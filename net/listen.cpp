@@ -9,6 +9,12 @@ KListen::KListen()
 	m_hThread = NULL;
 	m_hSocket = INVALID_SOCKET;
 	m_nLastOne = 0;
+
+#ifdef WIN32
+	WSADATA WSAData = { 0 };
+
+	WSAStartup(SOCKET_VERSION_REQUIRED, &WSAData);
+#endif
 }
 
 KListen::~KListen()
@@ -17,6 +23,10 @@ KListen::~KListen()
 	{
 		StopListen();
 	}
+
+#ifdef WIN32
+	WSACleanup();
+#endif
 
 	m_hThread = NULL;
 }
@@ -43,7 +53,7 @@ int KListen::Listen(const char* szIP, int nPort)
 	sAddr.sin_family = AF_INET;
 
 	// check ip
-	KF_PROCESS_ERROR(szIP != NULL and strlen(szIP) >= 1);
+	KF_PROCESS_ERROR(szIP != NULL && strlen(szIP) >= 1);
 	m_dwLocalIP = inet_addr(szIP);
 	KF_PROCESS_ERROR(m_dwLocalIP != INADDR_NONE);
 
@@ -151,7 +161,12 @@ int KListen::StopListen()
 	// clear socket handle
 	if (m_hSocket != INVALID_SOCKET)	// 容错，应该必须不是 INVALID_SOCKET
 	{
+#ifdef WIN32
+		closesocket(m_hSocket);
+#else
 		close(m_hSocket);
+#endif
+
 		m_hSocket = INVALID_SOCKET;
 	}
 	
@@ -166,7 +181,12 @@ int KListen::StopListen()
 	// clear accept socket handle
 	while (m_nLastOne >= 0)
 	{
-		close(m_hAcceptSocket[m_nLastOne]);
+#ifdef WIN32
+		closesocket(m_hSocket);
+#else
+		close(m_hSocket);
+#endif
+
 		m_nLastOne--;
 	}
 	

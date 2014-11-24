@@ -2,6 +2,7 @@
 #define __PLATFORM_SOCKET_H__
 
 #ifdef WIN32
+#include <winsock.h>
 #else
 #include <sys/types.h>
 #include <netinet/in.h> // base struct
@@ -10,6 +11,11 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <sys/stat.h> // file handle
+#endif
+
+// windows only
+#ifndef SOCKET_VERSION_REQUIRED
+#define SOCKET_VERSION_REQUIRED     0x202
 #endif
 
 // windows has,linux no

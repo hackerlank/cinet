@@ -6,16 +6,24 @@ void TestStopListen();
 
 int main()
 {
+	std::cout << "hello, Test" << std::endl;
+
 	TestListen();
 
 	TestStopListen();
+
+	std::cout << "Test Success" << std::endl;
 }
 
 void TestListen()
 {
 	KListen* pl = new KListen();
 	int errorcode;
+#ifdef WIN32
+	errorcode = pl->Listen("", 8080);	//  IP Error
+#else
 	errorcode = pl->Listen("127.0.0.0", 8080);	//  IP Error
+#endif
 	if(errorcode != 1)
 	{
 		K_ERROR_SYS("listen error : %d", errorcode);
