@@ -80,6 +80,8 @@
     <ClInclude Include="..\..\..\base\include\commondefine.h" />
     <ClInclude Include="..\..\..\base\include\error.h" />
     <ClInclude Include="..\..\..\base\include\function.h" />
+    <ClInclude Include="..\..\..\net\action.h" />
+    <ClInclude Include="..\..\..\net\event.h" />
     <ClInclude Include="..\..\..\net\listen.h" />
     <ClInclude Include="..\..\..\net\platform.h" />
     <ClInclude Include="..\..\..\net\socketdata.h" />
