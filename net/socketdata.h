@@ -7,12 +7,16 @@
 // 记录本地的 ip port
 // 记录远程的 ip port
 class KSocketData {
-	private:
-		unsigned int m_hSocketHandle;
-		DWORD m_nLocalIP;
-		int m_nLocalPort;
-		DWORD m_nRemoteIP;
-		int m_nRemotePort
+public:
+	KSocketData();
+	~KSocketData();
+
+private:
+	unsigned int	m_hSocketHandle;
+	DWORD			m_nLocalIP;
+	int				m_nLocalPort;
+	DWORD			m_nRemoteIP;
+	int				m_nRemotePort;
 }
 
 #endif
