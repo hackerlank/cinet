@@ -42,6 +42,9 @@
     <ClInclude Include="..\..\..\net\event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\net\cinetmain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\base\source\error.cpp">

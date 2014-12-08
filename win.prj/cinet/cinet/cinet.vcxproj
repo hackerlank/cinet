@@ -81,6 +81,7 @@
     <ClInclude Include="..\..\..\base\include\error.h" />
     <ClInclude Include="..\..\..\base\include\function.h" />
     <ClInclude Include="..\..\..\net\action.h" />
+    <ClInclude Include="..\..\..\net\cinetmain.h" />
     <ClInclude Include="..\..\..\net\event.h" />
     <ClInclude Include="..\..\..\net\listen.h" />
     <ClInclude Include="..\..\..\net\platform.h" />
