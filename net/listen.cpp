@@ -222,7 +222,7 @@ void KListen::WorkThread(void *pThis)
 		FD_ZERO(&sFailSet);
 		FD_SET(pWork->m_hSocket, &sFailSet);
 
-		nSelectRet = select(pWork->m_hSocket + 1, &sProcessSet, NULL, &sFailSet, &sTimeVal);	// ？是否是立即返回
+		nSelectRet = select(pWork->m_hSocket + 1, &sProcessSet, NULL, &sFailSet, &sTimeVal);
 		if (nSelectRet == SOCKET_ERROR || FD_ISSET(pWork->m_hSocket, &sFailSet))
 		{
 			pWork->ListenFail();
