@@ -70,6 +70,36 @@ void TestEvent()
 	pEvent->DestroyEvent();
 }
 
+CiNetEventList ThreadList;
+KExclusive PopNumLock;
+int nPopNum;
+
+void TestThreadFunc_AddTail(void* pData)
+{
+	CiNetEvent* pNewEvent = ThreadList.CreateEventObj(CiNetEvent::E_CINET_EVENT_DISCONNECT, (KSocketData*)(pData));
+	ThreadList.AddTail(pNewEvent);
+}
+
+void TestThreadFunc_PopHeader(void* pData)
+{
+	CiNetEvent* pEvent = ThreadList.PopHeader();
+	if (pEvent)
+	{
+		pEvent->DestroyEvent();
+		
+		PopNumLock.EnterExclusive();
+		nPopNum--;
+		std::cout << "destroy one:" << nPopNum << std::endl;
+		PopNumLock.LeaveExclusive();
+	}
+	else
+	{
+		PopNumLock.EnterExclusive();
+		std::cout << "empty one" << std::endl;
+		PopNumLock.LeaveExclusive();
+	}
+}
+
 void TestEventList()
 {
 	// test for single interface
@@ -165,6 +195,42 @@ void TestEventList()
 	if (pEvent8 != pEvent7)
 	{
 		K_ERROR_QUIT("Event List Pop Header Error");
+	}
+
+	// test for threads
+	int nSum = 50;
+	nPopNum = nSum;
+	KThread* pThreadList[50];
+	for (int i = 0; i < nSum; i ++)
+	{
+		pThreadList[i] = new KThread();
+		pThreadList[i]->Create(TestThreadFunc_AddTail, &pData);
+	}
+
+	KThread* pThreadList2[100];
+	for (int i = 0; i < nSum * 2; i++)
+	{
+		pThreadList2[i] = new KThread();
+		pThreadList2[i]->Create(TestThreadFunc_PopHeader, &pData);
+	}
+
+	KThread_Sleep(1000 * 3);
+
+	if (nPopNum != 0)
+	{
+		K_ERROR_QUIT("Event List Threads Run Error, %d", 50 - nPopNum);
+	}
+
+	for (int i = 0; i < nSum; i++)
+	{
+		pThreadList[i]->Destroy();
+		delete pThreadList[i];
+	}
+
+	for (int i = 0; i < nSum * 2; i++)
+	{
+		pThreadList2[i]->Destroy();
+		delete pThreadList2[i];
 	}
 }
 

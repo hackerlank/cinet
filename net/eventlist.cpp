@@ -56,16 +56,17 @@ ExitFailed:
 CiNetEvent* CiNetEventList::PopHeader()
 {
 	CiNetEvent* pRet = NULL;
+	bool bEmpty = false;
 
 	// lock
 	m_Lock.EnterExclusive();
-
-	KF_PROCESS_ERROR(m_EventList.empty() == false);
-
-	pRet = m_EventList.front();
-	// remove header
-	m_EventList.pop_front();
-
+	bEmpty = (m_EventList.empty() == true);
+	if (!bEmpty)
+	{
+		pRet = m_EventList.front();
+		// remove header
+		m_EventList.pop_front();
+	}
 	// unlock
 	m_Lock.LeaveExclusive();
 
