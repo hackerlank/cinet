@@ -1,6 +1,7 @@
 #ifndef __CINET_EVENT_H__
 #define __CINET_EVENT_H__
 
+#include <stdio.h>
 #include "socketdata.h"
 
 class CiNetEvent
@@ -20,8 +21,19 @@ public:
 
 	CiNetEvent();
 	~CiNetEvent();
+
+	// success 0
+	// typeerror 1
+	// socketdataerror 2
+	// alreadyinit 3
+	int Init(CiNetEvent::E_CINET_EVENT_TYPE nType, KSocketData* pData);
+
+	// success 0
+	int Uninit();
+
 protected:
 private:
+	CiNetEvent::E_CINET_EVENT_TYPE m_Type;
 	KSocketData *m_SocketData;
 };
 #endif // __CINET_EVENT_H__

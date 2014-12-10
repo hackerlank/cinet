@@ -83,15 +83,18 @@
     <ClInclude Include="..\..\..\net\action.h" />
     <ClInclude Include="..\..\..\net\cinetmain.h" />
     <ClInclude Include="..\..\..\net\event.h" />
+    <ClInclude Include="..\..\..\net\eventlist.h" />
     <ClInclude Include="..\..\..\net\listen.h" />
     <ClInclude Include="..\..\..\net\platform.h" />
     <ClInclude Include="..\..\..\net\socketdata.h" />
+    <ClInclude Include="..\..\..\thread\exclusive.h" />
     <ClInclude Include="..\..\..\thread\kthread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\base\source\error.cpp" />
+    <ClCompile Include="..\..\..\net\event.cpp" />
     <ClCompile Include="..\..\..\net\listen.cpp" />
-    <ClCompile Include="..\..\..\net\listen_test.cpp" />
+    <ClCompile Include="..\..\..\net\cinet_test.cpp" />
     <ClCompile Include="..\..\..\net\socketdata.cpp" />
     <ClCompile Include="..\..\..\thread\kthread.cpp" />
   </ItemGroup>

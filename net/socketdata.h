@@ -8,8 +8,11 @@
 // 记录远程的 ip port
 class KSocketData {
 public:
-	KSocketData();
-	~KSocketData();
+	KSocketData()
+	{};
+
+	~KSocketData()
+	{};
 
 private:
 	unsigned int	m_hSocketHandle;
@@ -17,6 +20,6 @@ private:
 	int				m_nLocalPort;
 	DWORD			m_nRemoteIP;
 	int				m_nRemotePort;
-}
+};
 
 #endif

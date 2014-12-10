@@ -11,13 +11,17 @@ public:
 	CiNetEventList();
 	~CiNetEventList();
 
-	int Init();
-
-	int AddTail();
+	int AddTail(CiNetEvent* pEvent);
 	CiNetEvent* RemoveHeader();
+	bool IsEmpty();
 
 protected:
 private:
+	int init();
+	int uninit();
+
+	int clearList();
+
 	std::list<CiNetEvent*> m_EventList;
 	KExclusive m_Lock;
 };

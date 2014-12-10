@@ -1,18 +1,79 @@
 #include "listen.h"
 #include "../base/include/error.h"
+#include "event.h"
 
+void TestEventListPart();
 void TestListen();
 void TestStopListen();
 
 int main()
 {
 	std::cout << "hello, Test" << std::endl;
+	TestEventListPart();
+	std::cout << "Test Success" << std::endl;
 
+	int nEnd;
+	std::cin >> nEnd ;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// EventList
+void TestEvent()
+{
+	CiNetEvent event;
+
+	KSocketData* pData = new KSocketData();
+
+	// type error
+	int errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_NONE, pData);
+	if (errcode != 1)
+	{
+		K_ERROR_QUIT("Event Init error: %d", errcode);
+	}
+
+	// socket empty
+	errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, NULL);
+	if (errcode != 2)
+	{
+		K_ERROR_QUIT("Event Init error: %d", errcode);
+	}
+
+	// success
+	errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
+	if (errcode != 0)
+	{
+		K_ERROR_QUIT("Event Init Error: %d", errcode);
+	}
+
+	// init twice
+	errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
+	if (errcode != 3)
+	{
+		K_ERROR_QUIT("Event Init Error: %d", errcode);
+	}
+
+	delete pData;
+}
+
+void TestEventList()
+{
+
+}
+
+void TestEventListPart()
+{
+	TestEvent();
+
+	TestEventList();
+}
+
+//////////////////////////////////////////////////////////////////////////
+// KListen
+void TestListenPart()
+{
 	TestListen();
 
 	TestStopListen();
-
-	std::cout << "Test Success" << std::endl;
 }
 
 void TestListen()
