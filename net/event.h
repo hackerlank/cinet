@@ -20,7 +20,6 @@ public:
 	};
 
 	CiNetEvent();
-	~CiNetEvent();
 
 	// success 0
 	// typeerror 1
@@ -31,8 +30,14 @@ public:
 	// success 0
 	int Uninit();
 
+	int DestroyEvent();
+
+	bool CheckDataRight();
+
 protected:
 private:
+	~CiNetEvent();
+
 	CiNetEvent::E_CINET_EVENT_TYPE m_Type;
 	KSocketData *m_SocketData;
 };

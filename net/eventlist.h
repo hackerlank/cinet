@@ -11,8 +11,11 @@ public:
 	CiNetEventList();
 	~CiNetEventList();
 
+	CiNetEvent* CreateEventObj(CiNetEvent::E_CINET_EVENT_TYPE nType, KSocketData* pData);
+
 	int AddTail(CiNetEvent* pEvent);
-	CiNetEvent* RemoveHeader();
+	CiNetEvent* PopHeader();
+
 	bool IsEmpty();
 
 protected:

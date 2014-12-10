@@ -1,6 +1,7 @@
 #include "listen.h"
 #include "../base/include/error.h"
 #include "event.h"
+#include "eventlist.h"
 
 void TestEventListPart();
 void TestListen();
@@ -20,44 +21,151 @@ int main()
 // EventList
 void TestEvent()
 {
-	CiNetEvent event;
-
+	CiNetEvent* pEvent = new CiNetEvent();
 	KSocketData* pData = new KSocketData();
 
+	// check data right
+	bool bRight = pEvent->CheckDataRight();
+	if (bRight != false)
+	{
+		K_ERROR_QUIT("Event Check Data Right Error");
+	}
+
 	// type error
-	int errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_NONE, pData);
+	int errcode = pEvent->Init(CiNetEvent::E_CINET_EVENT_CONNECT_NONE, pData);
 	if (errcode != 1)
 	{
 		K_ERROR_QUIT("Event Init error: %d", errcode);
 	}
 
 	// socket empty
-	errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, NULL);
+	errcode = pEvent->Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, NULL);
 	if (errcode != 2)
 	{
 		K_ERROR_QUIT("Event Init error: %d", errcode);
 	}
 
 	// success
-	errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
+	errcode = pEvent->Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
 	if (errcode != 0)
 	{
 		K_ERROR_QUIT("Event Init Error: %d", errcode);
 	}
 
+	// check data right
+	bRight = pEvent->CheckDataRight();
+	if (bRight != true)
+	{
+		K_ERROR_QUIT("Event Check Data Right Error");
+	}
+
 	// init twice
-	errcode = event.Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
+	errcode = pEvent->Init(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
 	if (errcode != 3)
 	{
 		K_ERROR_QUIT("Event Init Error: %d", errcode);
 	}
 
 	delete pData;
+	pEvent->DestroyEvent();
 }
 
 void TestEventList()
 {
+	// test for single interface
+	// CreateEvent
+	CiNetEventList list;
+	KSocketData* pData = new KSocketData();
+	CiNetEvent* pEvent = list.CreateEventObj(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, NULL);
+	if (pEvent != NULL)
+	{
+		K_ERROR_QUIT("Event List Create Event Error");
+	}
+	pEvent = list.CreateEventObj(CiNetEvent::E_CINET_EVENT_CONNECT_NONE, pData);
+	if (pEvent != NULL)
+	{
+		K_ERROR_QUIT("Event List Create Event Error");
+	}
+	pEvent = list.CreateEventObj(CiNetEvent::E_CINET_EVENT_CONNECT_FAIL, pData);
+	if (pEvent == NULL)
+	{
+		K_ERROR_QUIT("Event List Create Event Error");
+	}
 
+	// AddTail & IsEmpty
+	CiNetEvent* pEvent2 = NULL;
+	int errorcode = list.AddTail(pEvent2);
+	if (errorcode != 1)
+	{
+		K_ERROR_QUIT("Event List Add Tail Error: %d", errorcode);
+	}
+
+	pEvent2 = new CiNetEvent();
+	errorcode = list.AddTail(pEvent2);
+	if (errorcode != 2)
+	{
+		K_ERROR_QUIT("Event List Add Tail Error: %d", errorcode);
+	}
+	pEvent2->DestroyEvent();
+
+	bool bIsEmpty = list.IsEmpty();
+	if (bIsEmpty != true)
+	{
+		K_ERROR_QUIT("Event List Is Empty Error");
+	}
+
+	errorcode = list.AddTail(pEvent);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("Event List Add Tail Error: %d", errorcode);
+	}
+
+	bIsEmpty = list.IsEmpty();
+	if (bIsEmpty != false)
+	{
+		K_ERROR_QUIT("Event List Is Empty Error");
+	}
+
+	CiNetEvent* pEvent3 = list.CreateEventObj(CiNetEvent::E_CINET_EVENT_CONNECT_SUCCESS, pData);
+	errorcode = list.AddTail(pEvent3);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("Event List Add Tail Error :%d", errorcode);
+	}
+
+	// test for Delete Modul
+	CiNetEvent* pEvent4 = list.PopHeader();
+	if (pEvent != pEvent4)
+	{
+		K_ERROR_QUIT("Event List Pop Header Error");
+	}
+	pEvent4->DestroyEvent();
+
+	CiNetEvent* pEvent5 = list.PopHeader();
+	if (pEvent3 != pEvent5)
+	{
+		K_ERROR_QUIT("Event List Pop Header Error");
+	}
+	pEvent5->DestroyEvent();
+
+	CiNetEvent* pEvent6 = list.PopHeader();
+	if (pEvent6 != NULL)
+	{
+		K_ERROR_QUIT("Event List Pop Header Error");
+	}
+
+	CiNetEvent* pEvent7 = list.CreateEventObj(CiNetEvent::E_CINET_EVENT_CONNECT_FAIL, pData);
+	errorcode = list.AddTail(pEvent7);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("Event List Add Tail Error");
+	}
+
+	CiNetEvent* pEvent8 = list.PopHeader();
+	if (pEvent8 != pEvent7)
+	{
+		K_ERROR_QUIT("Event List Pop Header Error");
+	}
 }
 
 void TestEventListPart()

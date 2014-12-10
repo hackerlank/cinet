@@ -1,4 +1,6 @@
 #include "event.h"
+#include "../base/include/error.h"
+#include "../base/include/function.h"
 
 CiNetEvent::CiNetEvent()
 {
@@ -47,4 +49,21 @@ int CiNetEvent::Uninit()
 	m_SocketData = NULL;
 	
 	return 0;
+}
+
+// success 0
+int CiNetEvent::DestroyEvent()
+{
+	delete this;
+	return 0;
+}
+
+bool CiNetEvent::CheckDataRight()
+{
+	if (m_Type <= CiNetEvent::E_CINET_EVENT_CONNECT_NONE || m_Type > CiNetEvent::E_CINET_EVENT_MESSAGE || m_SocketData == NULL)
+	{
+		return false;
+	}
+
+	return true;
 }

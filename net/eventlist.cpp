@@ -1,8 +1,15 @@
 #include "eventlist.h"
+#include "../base/include/error.h"
+#include "../base/include/function.h"
 
 CiNetEventList::CiNetEventList()
 {
 	init();
+}
+
+CiNetEventList::~CiNetEventList()
+{
+	uninit();
 }
 
 int CiNetEventList::init()
@@ -23,10 +30,14 @@ int CiNetEventList::uninit()
 
 // success 0
 // eventnull 1
+// eventerror 2
 int CiNetEventList::AddTail(CiNetEvent* pEvent)
 {
 	int nRet = 1;
 	KF_PROCESS_ERROR(pEvent);
+
+	nRet = 2;
+	KF_PROCESS_ERROR(pEvent->CheckDataRight() == true);
 
 	// lock
 	m_Lock.EnterExclusive();
@@ -42,7 +53,7 @@ ExitFailed:
 	return nRet;
 }
 
-CiNetEvent* CiNetEventList::RemoveHeader()
+CiNetEvent* CiNetEventList::PopHeader()
 {
 	CiNetEvent* pRet = NULL;
 
@@ -58,6 +69,7 @@ CiNetEvent* CiNetEventList::RemoveHeader()
 	// unlock
 	m_Lock.LeaveExclusive();
 
+ExitFailed:
 	return pRet;
 }
 
@@ -82,4 +94,23 @@ bool CiNetEventList::IsEmpty()
 
 	m_Lock.LeaveExclusive();
 	return bRet;
+}
+
+CiNetEvent* CiNetEventList::CreateEventObj(CiNetEvent::E_CINET_EVENT_TYPE nType, KSocketData* pData)
+{
+	CiNetEvent* pRet = NULL;
+	int errorcode = 0;
+
+	pRet = new CiNetEvent();
+
+	errorcode = pRet->Init(nType, pData);
+	KF_PROCESS_ERROR(errorcode == 0);
+
+ExitFailed:
+	if (errorcode != 0 && pRet)
+	{
+		pRet->DestroyEvent();
+		pRet = NULL;
+	}
+	return pRet;
 }

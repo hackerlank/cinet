@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\base\source\error.cpp" />
     <ClCompile Include="..\..\..\net\event.cpp" />
+    <ClCompile Include="..\..\..\net\eventlist.cpp" />
     <ClCompile Include="..\..\..\net\listen.cpp" />
     <ClCompile Include="..\..\..\net\cinet_test.cpp" />
     <ClCompile Include="..\..\..\net\socketdata.cpp" />
