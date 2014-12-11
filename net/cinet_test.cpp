@@ -2,8 +2,11 @@
 #include "../base/include/error.h"
 #include "event.h"
 #include "eventlist.h"
+#include "action.h"
+#include "actionlist.h"
 
 void TestEventListPart();
+void TestActionListPart();
 void TestListen();
 void TestStopListen();
 
@@ -11,6 +14,8 @@ int main()
 {
 	std::cout << "hello, Test" << std::endl;
 	TestEventListPart();
+
+	TestActionListPart();
 	std::cout << "Test Success" << std::endl;
 
 	int nEnd;
@@ -89,13 +94,13 @@ void TestThreadFunc_PopHeader(void* pData)
 		
 		PopNumLock.EnterExclusive();
 		nPopNum--;
-		std::cout << "destroy one:" << nPopNum << std::endl;
+		// std::cout << "destroy one:" << nPopNum << std::endl;
 		PopNumLock.LeaveExclusive();
 	}
 	else
 	{
 		PopNumLock.EnterExclusive();
-		std::cout << "empty one" << std::endl;
+		// std::cout << "empty one" << std::endl;
 		PopNumLock.LeaveExclusive();
 	}
 }
@@ -239,6 +244,52 @@ void TestEventListPart()
 	TestEvent();
 
 	TestEventList();
+}
+
+//////////////////////////////////////////////////////////////////////////
+// KAction
+void TestAction()
+{
+	CiNetAction action;
+	KSocketData data;
+	// Init
+	int errorcode = action.Init(CiNetAction::E_NET_ACTION_NONE, &data);
+	if (errorcode != 1)
+	{
+		K_ERROR_QUIT("CiNet Action Init Error: %d", errorcode);
+	}
+
+	errorcode = action.Init(CiNetAction::E_NET_ACTION_LISTEN, NULL);
+	if (errorcode != 2)
+	{
+		K_ERROR_QUIT("CiNet Action Init Error: %d", errorcode);
+	}
+
+	errorcode = action.Init(CiNetAction::E_NET_ACTION_CONNECT, &data);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("CiNet Action Init Error: %d", errorcode);
+	}
+
+	errorcode = action.Init(CiNetAction::E_NET_ACTION_LISTEN, &data);
+	if (errorcode != 3)
+	{
+		K_ERROR_QUIT("CiNet Action Init Error: %d", errorcode);
+	}
+
+	// Uninit
+	action.Uninit();
+
+	errorcode = action.Init(CiNetAction::E_NET_ACTION_CONNECT, &data);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("CiNet Action Init Error: %d", errorcode);
+	}
+}
+
+void TestActionListPart()
+{
+	TestAction();
 }
 
 //////////////////////////////////////////////////////////////////////////

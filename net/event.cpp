@@ -18,28 +18,24 @@ CiNetEvent::~CiNetEvent()
 // alreadyinit 3
 int CiNetEvent::Init(CiNetEvent::E_CINET_EVENT_TYPE nType, KSocketData* pData)
 {
+	int nRet = 1;
 	// check arg
-	if (nType <= CiNetEvent::E_CINET_EVENT_CONNECT_NONE || nType > CiNetEvent::E_CINET_EVENT_MESSAGE)
-	{
-		return 1;
-	}
+	KF_PROCESS_ERROR(nType > CiNetEvent::E_CINET_EVENT_CONNECT_NONE && nType <= CiNetEvent::E_CINET_EVENT_MESSAGE);
 
-	if (pData == NULL)
-	{
-		return 2;
-	}
+	nRet = 2;
+	KF_PROCESS_ERROR(pData != NULL);
 
 	// check self
-	if (m_Type != CiNetEvent::E_CINET_EVENT_CONNECT_NONE || m_SocketData != NULL)
-	{
-		return 3;
-	}
+	nRet = 3;
+	KF_PROCESS_ERROR(m_Type == CiNetEvent::E_CINET_EVENT_CONNECT_NONE && m_SocketData == NULL);
 
 	// set value
 	m_Type = nType;
 	m_SocketData = pData;
 
-	return 0;
+	nRet = 0;
+ExitFailed:
+	return nRet;
 }
 
 // success 0

@@ -81,6 +81,7 @@
     <ClInclude Include="..\..\..\base\include\error.h" />
     <ClInclude Include="..\..\..\base\include\function.h" />
     <ClInclude Include="..\..\..\net\action.h" />
+    <ClInclude Include="..\..\..\net\actionlist.h" />
     <ClInclude Include="..\..\..\net\cinetmain.h" />
     <ClInclude Include="..\..\..\net\event.h" />
     <ClInclude Include="..\..\..\net\eventlist.h" />
@@ -92,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\base\source\error.cpp" />
+    <ClCompile Include="..\..\..\net\action.cpp" />
     <ClCompile Include="..\..\..\net\event.cpp" />
     <ClCompile Include="..\..\..\net\eventlist.cpp" />
     <ClCompile Include="..\..\..\net\listen.cpp" />

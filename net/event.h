@@ -34,6 +34,11 @@ public:
 
 	bool CheckDataRight();
 
+	KSocketData* GetSocket()
+	{
+		return m_SocketData;
+	}
+
 protected:
 private:
 	~CiNetEvent();

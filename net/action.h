@@ -1,6 +1,7 @@
 #ifndef __CINET_ACTION_H__
 #define __CINET_ACTION_H__
 
+#include <stdio.h>
 #include "socketdata.h"
 
 class CiNetAction
@@ -17,8 +18,12 @@ public:
 	CiNetAction();
 	~CiNetAction();
 
+	int Init(CiNetAction::E_CINET_ACTION_TYPE nType, KSocketData* pData);
+	int Uninit();
+
 protected:
 private:
+	CiNetAction::E_CINET_ACTION_TYPE m_Type;
 	KSocketData *m_SocketData;
 };
 
