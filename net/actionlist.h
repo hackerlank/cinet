@@ -12,10 +12,13 @@ public:
 	~CiNetActionList();
 
 	int AddAction(CiNetAction::E_CINET_ACTION_TYPE nType, KSocketData* pData);
-	int CheckAction();
+	int CheckActionList();
+
+	bool IsEmpty();
 
 protected:
 private:
+	int takeAction(CiNetAction* pAction);
 
 	KExclusive m_Lock;
 	std::list<CiNetAction*> m_ActionList;

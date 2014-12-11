@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\base\source\error.cpp" />
     <ClCompile Include="..\..\..\net\action.cpp" />
+    <ClCompile Include="..\..\..\net\actionlist.cpp" />
     <ClCompile Include="..\..\..\net\event.cpp" />
     <ClCompile Include="..\..\..\net\eventlist.cpp" />
     <ClCompile Include="..\..\..\net\listen.cpp" />

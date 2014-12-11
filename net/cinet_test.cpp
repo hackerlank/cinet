@@ -14,7 +14,7 @@ int main()
 {
 	std::cout << "hello, Test" << std::endl;
 	TestEventListPart();
-
+	std::cout << "finish event list test" << std::endl;
 	TestActionListPart();
 	std::cout << "Test Success" << std::endl;
 
@@ -287,9 +287,103 @@ void TestAction()
 	}
 }
 
+KSocketData SocketData;
+
+void TestTreadFunc_AddAction(void* pData)
+{
+	CiNetActionList* pList = (CiNetActionList *)(pData);
+	pList->AddAction(CiNetAction::E_NET_ACTION_DISCONNECT, &SocketData);
+}
+
+void TestThreadFunc_CheckAction(void* pData)
+{
+	CiNetActionList* pList = (CiNetActionList *)(pData);
+	while (1)
+	{
+		pList->CheckActionList();
+	}
+}
+
+void TestActionList()
+{
+	// single thread
+	// add action
+	CiNetActionList list;
+	int errorcode = list.AddAction(CiNetAction::E_NET_ACTION_NONE, NULL);
+	if (errorcode != 1)
+	{
+		K_ERROR_QUIT("CiNet Action List Add Error: %d", errorcode);
+	}
+
+	errorcode = list.AddAction(CiNetAction::E_NET_ACTION_SEND, NULL);
+	if (errorcode != 2)
+	{
+		K_ERROR_QUIT("CiNet Action List Add Error: %d", errorcode);
+	}
+
+	KSocketData data;
+	errorcode = list.AddAction(CiNetAction::E_NET_ACTION_LISTEN, &data);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("CiNet Action List Add Error: %d", errorcode);
+	}
+
+	if (list.IsEmpty() != false)
+	{
+		K_ERROR_QUIT("CiNet Action List Is Empty Error");
+	}
+
+	errorcode = list.AddAction(CiNetAction::E_NET_ACTION_SEND, &data);
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("CiNet Action List Add Error: %d", errorcode);
+	}
+
+	errorcode = list.CheckActionList();
+	if (errorcode != 0)
+	{
+		K_ERROR_QUIT("CiNet Action List Check List Error: %d", errorcode);
+	}
+
+	if (list.IsEmpty() != true)
+	{
+		K_ERROR_QUIT("CiNet Action List Is Empty Error");
+	}
+
+	// mutli threads
+	int nMax = 50;
+	KThread* pThreadList[50];
+	for (int i = 0; i < nMax; i++)
+	{
+		pThreadList[i] = new KThread();
+		pThreadList[i]->Create(TestTreadFunc_AddAction, ((void*)&list));
+	}
+
+	KThread* pCheckThread = new KThread();
+	pCheckThread->Create(TestThreadFunc_CheckAction, (void*)&list);
+
+	KThread_Sleep(100);
+
+	if (list.IsEmpty() != true)
+	{
+		K_ERROR_QUIT("CiNet Action List Run Error");
+	}
+
+	for (int i = 0; i < nMax; i++)
+	{
+		pThreadList[i]->Destroy();
+		delete pThreadList[i];
+	}
+
+	pCheckThread->Terminate();
+	delete pCheckThread;
+}
+
 void TestActionListPart()
 {
 	TestAction();
+
+	TestActionList();
 }
 
 //////////////////////////////////////////////////////////////////////////
