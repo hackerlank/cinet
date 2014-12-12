@@ -28,10 +28,10 @@ cinet_test: base thread cinet $(NET_DIR)/listen_test.cpp
 	cc $(CFLAGS) -o $(APP_DIR)/cinet_test.app $(NET_DIR)/listen_test.cpp $(OBJ_DIR)/cinet.o $(OBJ_DIR)/error.o $(OBJ_DIR)/thread.o
 
 # thread
-thread: base $(THREAD_DIR)/kthread.cpp
+thread: base $(THREAD_DIR)/kthread.cpp $(THREAD_DIR)/exclusive.h
 	cc $(CFLAGS) -o $(OBJ_DIR)/thread.o -c $(THREAD_DIR)/kthread.cpp
 
-tbread_test: base $(THREAD_DIR)/kthread.cpp $(THREAD_DIR)/test.cpp
+tbread_test: base $(THREAD_DIR)/kthread.cpp $(THREAD_DIR)/exclusive.h $(THREAD_DIR)/test.cpp
 	cc $(CFLAGS) -o $(APP_DIR)/thread_test.app $(THREAD_DIR)/kthread.cpp $(THREAD_DIR)/test.cpp $(OBJ_DIR)/error.o
 
 # base
@@ -43,6 +43,6 @@ base_test: $(BASE_SOURCE)/error.cpp $(BASE_SOURCE)/error_test.cpp
 
 .PHONY:clean
 clean:
-	-rm -f $(APP_DIR) *.app
-	-rm -f $(OBJ_DIR) *.o
+	-rm -f $(APP_DIR)/*.app
+	-rm -f $(OBJ_DIR)/*.o
 	-rm -rf *.dSYM
